@@ -12,10 +12,22 @@ SELECT avg(duratiton) FROM track t
 GROUP BY id_album; 
 
 -- Все исполнители, которые не выпустили альбомы в 2020 году.
-SELECT a.name_artist FROM artist a
-JOIN albumartist a2 ON a.id_artist = a2.id_artist 
-JOIN album a3 ON a2.id_album = a3.id_album 
-WHERE create_date NOT BETWEEN '2020/01/01' AND '2020/12/31';
+SELECT ar.name_artist FROM artist ar
+JOIN albumartist aa ON ar.id_artist = aa.id_artist 
+LEFT JOIN album al ON aa.id_album = al.id_album
+WHERE al.create_date BETWEEN '2020/01/01' AND '2020/12/31'
+
+
+
+-- Все исполнители, которые не выпустили альбомы в 2020 году.
+SELECT ar.name_artist FROM artist ar
+JOIN albumartist aa ON ar.id_artist = aa.id_artist 
+JOIN album al ON aa.id_album = al.id_album
+EXCEPT SELECT ar.name_artist FROM artist ar
+JOIN albumartist aa ON ar.id_artist = aa.id_artist 
+JOIN album al ON aa.id_album = al.id_album
+WHERE al.create_date BETWEEN '2020/01/01' AND '2020/12/31'
+
 
 --Названия сборников, в которых присутствует конкретный исполнитель (выберите его сами).
 SELECT DISTINCT c.name_collection FROM collection c

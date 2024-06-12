@@ -19,10 +19,13 @@ GROUP BY a.name_artist, t.duratiton
 HAVING t.duratiton = (SELECT min(duratiton) FROM track); 
 
 -- Названия альбомов, содержащих наименьшее количество треков.
-SELECT a.title  FROM album a 
+SELECT a.title, count(t.id_track)  FROM album a 
 JOIN track t ON a.id_album = t.id_album 
 GROUP BY a.title 
-HAVING count(t.id_album) = (SELECT min(id_album) FROM track);
+HAVING count(t.id_track) = (SELECT min(t1.c) FROM (SELECT count(*) c FROM album a1 GROUP BY a1.id_album) t1 ) 
+
+
+
 
 
 
